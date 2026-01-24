@@ -1,0 +1,96 @@
+from collections import Counter
+import requests
+from datetime import datetime, timedelta
+
+def fetch_github_repos(username):
+    url = f"https://api.github.com/users/{username}/repos"
+    data = requests.get(url)
+    json_data= data.json()
+    return json_data
+
+def extract_repo_info(json_data):
+    repo_info = [
+        {'name' : repo['name'],
+        'language' : repo["language"],
+        'stars' : repo['stargazers_count'],
+        'updated' : repo['updated_at'],
+        'description' : repo['description']}
+        for repo in json_data
+    ]
+    return repo_info
+
+def analyze_languages(json_data):
+    # Move your Counter logic here
+    # Return: counts, max_language, python_percentage
+    counts = Counter(repo['language'] for repo in json_data)
+    max_lang_used_2 = max(counts, key=counts.get)
+    max_lang_used = counts.most_common(1)
+
+    per_py = counts["Python"] * 100 / sum(counts.values())
+        
+    return counts, max_lang_used, per_py.__round__(4)
+
+def analyze_activity(json_data):
+    # Move your datetime logic here
+    # Return: months_counts, active_repos list
+    months = []
+    active_repos = []
+    for repo in json_data:
+        dt = datetime.strptime(repo['pushed_at'],"%Y-%m-%dT%H:%M:%SZ")
+        months.append(dt.strftime("%B"))
+        if dt > datetime.now() - timedelta(days=30):
+                active_repos.append(repo["name"])
+
+        months_counts = Counter(months)
+    return months_counts, active_repos
+
+def display_analysis(repo_info, counts, months_counts, per_py, active_repos, max_lang_used):
+    print("\n" + "="*60)
+    print("📊 GITHUB ACTIVITY ANALYSIS".center(60))
+    print("="*60)
+    
+    # Section headers:
+    def print_section(title):
+        print(f"\n{title}")
+        print("-"*60)
+    
+    # Your logic goes here:
+    print_section("📂 REPOSITORY OVERVIEW")
+    # YOUR CODE: print total repos, languages, etc
+    print(f"Total Repos : {len(repo_info)}")
+    print(f"Most Used Programming Language : {max_lang_used}")
+
+
+    
+    print_section("⭐ TOP REPOSITORIES")
+    # YOUR CODE: sort and print top repos
+    print(f"Most Stared Repos : {sorted(repo_info, key=lambda x : x['stars'], reverse=True)[:5]}")
+    
+    print_section("📈 LANGUAGE BREAKDOWN")
+    # YOUR CODE: print language percentages
+    print(f"Languages Used Across all Repos : {counts}")
+    print(f"Percentage of Python Used in across all Repos : {per_py}")
+    
+    print_section("📅 MONTHLY ACTIVITY")
+    # YOUR CODE: print months data
+    print(f"Monthly Activity : {months_counts}")
+    
+    print_section("🚀 RECENT ACTIVITY (30 days)")
+    # YOUR CODE: print active repos
+    print(f"Most Recent Active Repos: {active_repos}")
+    
+    print("\n" + "="*60 + "\n")
+
+def main():
+    username = "AnandVadgama"
+    # Call all functions in order
+    # Pass data between them
+    json_data = fetch_github_repos(username)
+    repo_info = extract_repo_info(json_data)
+    counts, max_lang_used, per_py = analyze_languages(json_data)
+    months_counts, active_repos = analyze_activity(json_data)
+    display_analysis(repo_info, counts, months_counts, per_py, active_repos, max_lang_used)
+
+if __name__ == "__main__": 
+    main()
+
