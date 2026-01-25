@@ -45,6 +45,12 @@ def analyze_activity(json_data):
         months_counts = Counter(months)
     return months_counts, active_repos
 
+# def compare_repo(f1: json, f2: json):
+#     """
+#     Load prev analysis and compare that am i getting better ?
+#     """
+#     with open()
+
 def display_analysis(repo_info, counts, months_counts, per_py, active_repos, max_lang_used):
     print("\n" + "="*60)
     print("📊 GITHUB ACTIVITY ANALYSIS".center(60))
@@ -105,6 +111,7 @@ def main():
 
 if __name__ == "__main__": 
     output = main()
-    path = f"/Users/macbookair/Desktop/Repos/GitHub-Activity-Analyzer/output_{datetime.now()}"
-    with open(f"output/analysis_{datetime.now()}.json", "w") as f:
-        json.dump(output,f, indent=4)
+    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    filename = f"output_{timestamp}.json"
+    with open(f"output/{filename}", "w") as f:
+        json.dump(output, f, indent=4)
