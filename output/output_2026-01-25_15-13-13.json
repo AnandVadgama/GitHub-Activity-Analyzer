@@ -1,0 +1,120 @@
+{
+    "username": "AnandVadgama",
+    "repo_info": [
+        {
+            "name": "AnandVadgama",
+            "language": null,
+            "stars": 0,
+            "updated": "2025-11-07T19:36:21Z",
+            "description": "My GitHub profile README"
+        },
+        {
+            "name": "dataset",
+            "language": null,
+            "stars": 0,
+            "updated": "2025-05-29T10:17:57Z",
+            "description": "for load dataset from a remote as practice"
+        },
+        {
+            "name": "DVC-versoning-practice",
+            "language": "Python",
+            "stars": 0,
+            "updated": "2025-07-24T12:55:55Z",
+            "description": "using DVC and git both for data and code versioning"
+        },
+        {
+            "name": "End-to-End-ML-Pipeline-using-DVC-AWS-S3",
+            "language": "Jupyter Notebook",
+            "stars": 0,
+            "updated": "2025-05-30T09:57:41Z",
+            "description": null
+        },
+        {
+            "name": "GitHub-Activity-Analyzer",
+            "language": "Python",
+            "stars": 0,
+            "updated": "2026-01-25T09:23:59Z",
+            "description": "Analyzes your GitHub repos and gives you insights about your coding habits"
+        },
+        {
+            "name": "Llama-2_from_scratch",
+            "language": "Python",
+            "stars": 0,
+            "updated": "2025-07-23T16:33:08Z",
+            "description": "Full coding of LLaMA 2 from scratch, including Rotary Positional Embedding, RMS Normalization, Multi-Query Attention, KV Cache, Grouped Query Attention (GQA), the SwiGLU Activation function and more!"
+        },
+        {
+            "name": "ML-DL-Projects",
+            "language": "Jupyter Notebook",
+            "stars": 0,
+            "updated": "2026-01-12T18:50:06Z",
+            "description": "This are the projects that i built for practice "
+        },
+        {
+            "name": "MLFlow-MLOps-prac",
+            "language": "Python",
+            "stars": 0,
+            "updated": "2025-06-16T14:41:48Z",
+            "description": "using MLFlow for data versioning and visualization etc..."
+        },
+        {
+            "name": "my-py-package",
+            "language": "Jupyter Notebook",
+            "stars": 0,
+            "updated": "2025-06-22T18:10:41Z",
+            "description": "created a python package for mongoDB and all other for automating things"
+        },
+        {
+            "name": "mytemplate-repo",
+            "language": "Python",
+            "stars": 0,
+            "updated": "2025-05-19T20:08:24Z",
+            "description": null
+        },
+        {
+            "name": "OOP-practice",
+            "language": "Python",
+            "stars": 0,
+            "updated": "2025-07-24T12:37:17Z",
+            "description": null
+        },
+        {
+            "name": "Proj-Vehicle_insurance-end_to_end",
+            "language": "Jupyter Notebook",
+            "stars": 0,
+            "updated": "2026-01-15T07:19:56Z",
+            "description": "created end to end project for vehicle insurance"
+        },
+        {
+            "name": "pytorch-transformer-from-scratch",
+            "language": "Python",
+            "stars": 0,
+            "updated": "2025-07-23T18:28:12Z",
+            "description": "Implemented the Transformer architecture from scratch in PyTorch for English-to-Colloquial Hindi translation, including training, inference, and attention visualization."
+        }
+    ],
+    "language_counts": {
+        "null": 2,
+        "Python": 7,
+        "Jupyter Notebook": 4
+    },
+    "most_used_language": [
+        [
+            "Python",
+            7
+        ]
+    ],
+    "python_percentage": 53.8462,
+    "monthly_activity": {
+        "November": 1,
+        "May": 3,
+        "July": 4,
+        "January": 3,
+        "June": 2
+    },
+    "active_repos": [
+        "GitHub-Activity-Analyzer",
+        "ML-DL-Projects",
+        "Proj-Vehicle_insurance-end_to_end"
+    ]
+}
