@@ -1,6 +1,7 @@
 from collections import Counter
 import requests
 from datetime import datetime, timedelta
+import json
 
 def fetch_github_repos(username):
     url = f"https://api.github.com/users/{username}/repos"
@@ -90,7 +91,20 @@ def main():
     counts, max_lang_used, per_py = analyze_languages(json_data)
     months_counts, active_repos = analyze_activity(json_data)
     display_analysis(repo_info, counts, months_counts, per_py, active_repos, max_lang_used)
+    
+    # Return analysis data for JSON export
+    return {
+        "username": username,
+        "repo_info": repo_info,
+        "language_counts": dict(counts),
+        "most_used_language": max_lang_used,
+        "python_percentage": per_py,
+        "monthly_activity": dict(months_counts),
+        "active_repos": active_repos
+    }
 
 if __name__ == "__main__": 
-    main()
-
+    output = main()
+    path = f"/Users/macbookair/Desktop/Repos/GitHub-Activity-Analyzer/output_{datetime.now()}"
+    with open(f"output/analysis_{datetime.now()}.json", "w") as f:
+        json.dump(output,f, indent=4)
