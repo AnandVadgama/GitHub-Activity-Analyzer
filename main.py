@@ -3,6 +3,7 @@ import requests
 from datetime import datetime, timedelta
 import json
 import glob
+import os
 
 def fetch_github_repos(username):
     url = f"https://api.github.com/users/{username}/repos"
@@ -72,8 +73,8 @@ def analyze_activity(json_data):
 
 def save_json(output):
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    filename = f"output_{timestamp}.json"
-    with open(f"output/{filename}", "w") as f:
+    file_name = f"output_{timestamp}.json"
+    with open(f"output/{file_name}", "w") as f:
         json.dump(output, f, indent=4)
 
 def compare_repo():
@@ -99,45 +100,61 @@ def compare_repo():
 
     return f"{repo_growth:+.1f}%"
 
-
-#     files_lst = files[:num]
-#     all_data = []
-#     for file in files_lst:
-#         with open(file, "r") as f:
-#             data = json.load(f)
-#             all_data.append(data)
-        
+def save_commit_message_json(all_commits, file_name= "commit_message.json"):
+    with open(file_name, "w") as f:
+        json.dump(all_commits, f, indent=2)
     
-    
-#     if len(files_lst) == len(set(files_lst)):
-#         print("no new repos found")
 
-#     else:
-#         print("new repos found")
-
-#     print(files_lst)
+def load_commits_from_file(file_name="commit_message.json"):
+    if os.path.exists(file_name):
+        with open(file_name) as f:
+            all_commits = json.load(f)
+            return all_commits
 
 def github_commit_analyzer(json_data):
-    all_commits = []
+    
+    all_commits = load_commits_from_file()
 
-    for repo in json_data:
-        url = repo["commits_url"].removesuffix("{/sha}")
-        data = requests.get(url).json()
-        all_commits.extend(data)
-        break
-        
+    if all_commits is None:
+        all_commits = []
+        for repo in json_data:
+            url = repo["commits_url"].removesuffix("{/sha}")
+            data = requests.get(url).json()
+            
+            # Add repo name to each commit to preserve repo information
+            for commit in data:
+                commit['repo_name'] = repo['name']
+            
+            all_commits.extend(data)
+            if len(data) > 0:
+                print(f"Sample commit from {repo['name']}:")
+                print(json.dumps(data[0], indent=2)) # Print first commit to see structure
+        save_commit_message_json(all_commits)
     
-        # print(all_commits)
-        
-    
-    commit_message =[]
+    # Process commits to extract structured data
+    commit_messages = []
     for commit in all_commits:
-        msg = commit["commit"]["message"]
-        print(msg)
-        commit_message.extend(msg)
-        break
-    print(commit_message)
+        try:
+            # Parse the commit date
+            commit_date = datetime.strptime(commit["commit"]["author"]["date"], "%Y-%m-%dT%H:%M:%SZ")
+            
+            commit_info = {
+                "repo_name": commit.get('repo_name', 'unknown'),
+                "author_name": commit["commit"]["author"]["name"],
+                "message": commit["commit"]["message"], 
+                "date": commit["commit"]["author"]["date"],
+                "hour": commit_date.hour,
+                "day_of_week": commit_date.strftime("%A"),
+                "month": commit_date.strftime("%B")
+            }
+            commit_messages.append(commit_info)
+        except (KeyError, ValueError) as e:
+            print(f"Error processing commit: {e}")
+            continue
     
+    print(f"Processed {len(commit_messages)} commits from {len(set(c['repo_name'] for c in commit_messages))} repositories")
+    
+    return commit_messages
 
 def display_analysis(repo_info, counts, months_counts, per_py, active_repos, max_lang_used):
     print("\n" + "="*60)
@@ -209,4 +226,5 @@ def main():
 if __name__ == "__main__": 
     output = main()
     # save_json(output)
+    
 
