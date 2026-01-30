@@ -111,7 +111,7 @@ def load_commits_from_file(file_name="commit_message.json"):
             all_commits = json.load(f)
             return all_commits
 
-def github_commit_analyzer(json_data):
+def github_commit_extractor(json_data):
     
     all_commits = load_commits_from_file()
 
@@ -120,7 +120,7 @@ def github_commit_analyzer(json_data):
         for repo in json_data:
             url = repo["commits_url"].removesuffix("{/sha}")
             data = requests.get(url).json()
-            
+
             # Add repo name to each commit to preserve repo information
             for commit in data:
                 commit['repo_name'] = repo['name']
@@ -153,8 +153,28 @@ def github_commit_analyzer(json_data):
             continue
     
     print(f"Processed {len(commit_messages)} commits from {len(set(c['repo_name'] for c in commit_messages))} repositories")
-    
+
     return commit_messages
+
+def github_commit_analyzer(commit_messages):
+    # Convert commit messages to lowercase for analysis
+    lower_split_msg = []
+    for message in commit_messages:
+        lm = message['message'].lower().split()  # Access the 'message' key and convert to lowercase
+        lower_split_msg.extend(lm)
+    
+    # print(lower_split_msg)
+    count_list = ["fixed", "upgraded", "added", "bug", "fix"]
+    counts = Counter(lower_split_msg)
+
+    count_words = {w: counts[w] for w in count_list}
+    return count_words
+
+def average_commit_per_repo(commit_messages):
+    count_commits = Counter(commit["repo_name"] for commit in commit_messages)
+    average_commit_per = ( sum(count_commits.values()) / len(count_commits ) )
+    return average_commit_per
+
 
 def display_analysis(repo_info, counts, months_counts, per_py, active_repos, max_lang_used):
     print("\n" + "="*60)
@@ -209,7 +229,9 @@ def main():
     repo_info = extract_repo_info(json_data)
     counts, max_lang_used, per_py = analyze_languages(json_data)
     months_counts, active_repos = analyze_activity(json_data)
-    github_commit_analyzer(json_data)  # Skip to avoid more API calls
+    commit_data = github_commit_extractor(json_data)  # Skip to avoid more API calls
+    github_commit_analyzer(commit_messages=commit_data)
+    average_commit_per_repo(commit_messages=commit_data)
     display_analysis(repo_info, counts, months_counts, per_py, active_repos, max_lang_used)
     
     # Return analysis data for JSON export
