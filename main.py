@@ -175,6 +175,13 @@ def average_commit_per_repo(commit_messages):
     average_commit_per = ( sum(count_commits.values()) / len(count_commits ) )
     return average_commit_per
 
+def most_active_time(commit_messages):
+    hour = [commit["hour"] for commit in commit_messages]
+    count_most_hour = Counter(hour)
+    most_active_hour = max(count_most_hour, key= count_most_hour.get)
+    return most_active_hour
+    
+
 
 def display_analysis(repo_info, counts, months_counts, per_py, active_repos, max_lang_used):
     print("\n" + "="*60)
@@ -232,6 +239,7 @@ def main():
     commit_data = github_commit_extractor(json_data)  # Skip to avoid more API calls
     github_commit_analyzer(commit_messages=commit_data)
     average_commit_per_repo(commit_messages=commit_data)
+    most_active_time(commit_data)
     display_analysis(repo_info, counts, months_counts, per_py, active_repos, max_lang_used)
     
     # Return analysis data for JSON export
