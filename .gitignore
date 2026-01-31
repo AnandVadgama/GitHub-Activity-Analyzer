@@ -3,6 +3,13 @@ __pycache__/
 *.py[codz]
 *$py.class
 
+# Project-specific generated files
+output/
+commit_message.json
+charts/
+main_old.py
+*.backup
+
 # C extensions
 *.so
 
